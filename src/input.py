@@ -12,7 +12,7 @@ if __name__ == "__main__":
     df['dia'] = pd.DatetimeIndex(df['fecha']).day
     df['mes'] = pd.DatetimeIndex(df['fecha']).month
     df['anyo'] = pd.DatetimeIndex(df['fecha']).year
-    print(df.dtypes)
+    df.drop('fecha', axis=1, inplace=True)
     # Corregir valores vacios categoria_dos
     df['categoria_dos'] = df['categoria_dos'].apply(lambda x: 0 if math.isnan(x) else x)
     # One-hot encoding de 'estado'
