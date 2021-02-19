@@ -26,7 +26,6 @@ def completar_primeros_precios(row):
     if precio == -1.0:        
         identificador = str(row['id'])
         precio = primer_precio.get(identificador)
-        print(precio)
     return precio
 
 if __name__ == "__main__":
