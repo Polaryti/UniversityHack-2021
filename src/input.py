@@ -13,4 +13,6 @@ if __name__ == "__main__":
     df = pd.concat([df, pd.get_dummies(pd.get_dummies(df['estado'], prefix='estado'))], axis=1).drop(['estado'],axis=1)
     # One-hot encoding de 'categoria_uno'
     df = pd.concat([df, pd.get_dummies(pd.get_dummies(df['categoria_uno'], prefix='categoria_uno'))], axis=1).drop(['categoria_uno'],axis=1)
+    # One-hot encoding de 'dia_atipico'
+    df = pd.concat([df, pd.get_dummies(pd.get_dummies(df['dia_atipico'], prefix='dia_atipico'))], axis=1).drop(['dia_atipico'],axis=1)
     df.to_csv(index = False, path_or_buf= sys.argv[1].replace('.txt', '') + ".csv", sep='|')
