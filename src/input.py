@@ -7,6 +7,12 @@ if __name__ == "__main__":
     df.drop_duplicates(inplace=True)
     # Quitar la hora de 'fecha'
     df['fecha'] = df['fecha'].apply(lambda x: x.replace(' 0:00:00', ''))
+    # Separación de fecha en 3 columnas
+    df['fecha'] = pd.to_datetime(df['fecha'])
+    df['dia'] = pd.DatetimeIndex(df['fecha']).day
+    df['mes'] = pd.DatetimeIndex(df['fecha']).month
+    df['anyo'] = pd.DatetimeIndex(df['fecha']).year
+    print(df.dtypes)
     # Corregir valores vacios categoria_dos
     df['categoria_dos'] = df['categoria_dos'].apply(lambda x: 0 if math.isnan(x) else x)
     # One-hot encoding de 'estado'
