@@ -1,3 +1,5 @@
+# pylint: disable=no-member
+
 import sys
 import math
 import pandas as pd
