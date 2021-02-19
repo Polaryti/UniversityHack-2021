@@ -8,7 +8,7 @@ if __name__ == "__main__":
     # Quitar la hora de 'fecha'
     df['fecha'] = df['fecha'].apply(lambda x: x.replace(' 0:00:00', ''))
     # Corregir valores vacios categoria_dos
-    df['categoria_dos'] = df['categoria_dos'].apply(lambda x: -1 if math.isnan(x) else x)
+    df['categoria_dos'] = df['categoria_dos'].apply(lambda x: 0 if math.isnan(x) else x)
     # One-hot encoding de 'estado'
     df = pd.concat([df, pd.get_dummies(pd.get_dummies(df['estado'], prefix='estado'))], axis=1).drop(['estado'],axis=1)
     # One-hot encoding de 'categoria_uno'
