@@ -1,5 +1,5 @@
 import sys
-import pd
+import panda as pd
 
 if __name__ == "__main__":
     df = pd.read_csv(filepath_or_buffer = sys.argv[1], sep = '|')
