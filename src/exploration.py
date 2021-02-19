@@ -1,7 +1,7 @@
 import sys
-import pandas
+import pandas as pd
 import numpy as np
 
 if __name__ == "__main__":
-    df = pandas.read_csv(filepath_or_buffer = sys.argv[1], sep = '|')
+    df = pd.read_csv(filepath_or_buffer = sys.argv[1], sep = '|')
     
