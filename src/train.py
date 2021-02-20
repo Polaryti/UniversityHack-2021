@@ -13,7 +13,7 @@ def casos_favorables(test, pred):
         if pred[i] < test[i]:
             rotura += 1
 
-    return rotura / total
+    return (total - rotura) / total
 
 
 if __name__ == "__main__":
