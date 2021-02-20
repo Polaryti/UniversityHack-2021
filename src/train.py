@@ -2,6 +2,7 @@ import pandas as pd
 from sklearn import linear_model
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
+import math
 import sys
 
 def casos_favorables(test, pred):
@@ -27,7 +28,7 @@ if __name__ == "__main__":
         print('{}   {}'.format(pred[i], y_test.values[i]))
 
 
-    rrmse = mean_squared_error(y_test, pred) / y_train.mean()
+    rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
     cf = casos_favorables(y_test.values, pred)
     metric = (0.7 * rrmse) + (0.3 * (1 - cf))
 
