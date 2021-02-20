@@ -22,13 +22,14 @@ if __name__ == "__main__":
     reg.fit(X_train, y_train)
     pred = reg.predict(X_test)
     
-    print(pred[:10])
-    print(y_test.values[:10])
+    print('{}   {}'.format("Pred", "True"))
+    for i in range(10):
+        print('{}   {}'.format(pred[i], y_test.values[i]))
 
 
     rrmse = mean_squared_error(y_test, pred) / y_train.mean()
     cf = casos_favorables(y_test.values, pred)
-    print(cf)
     metric = (0.7 * rrmse) + (0.3 * (1 - cf))
 
-    print(metric)
+    print('El cf es: {}'.format(cf))
+    print('La métrica es: {}'.format(metric))
