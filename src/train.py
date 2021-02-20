@@ -28,6 +28,7 @@ if __name__ == "__main__":
 
     rrmse = mean_squared_error(y_test, pred) / y_train.mean()
     cf = casos_favorables(y_test.values, pred)
+    print(cf)
     metric = (0.7 * rrmse) + (0.3 * (1 - cf))
 
     print(metric)
