@@ -5,6 +5,7 @@ from sklearn.metrics import mean_squared_error
 import math
 import sys
 
+
 def casos_favorables(test, pred):
     rotura = 0
     total = len(test)
@@ -22,11 +23,10 @@ if __name__ == "__main__":
     reg = linear_model.LinearRegression()
     reg.fit(X_train, y_train)
     pred = reg.predict(X_test)
-    
-    print('{}   {}'.format("Pred", "True"))
-    for i in range(10):
-        print('{}   {}'.format(pred[i], y_test.values[i]))
 
+    print('{:<24}   {}'.format("Pred", "True"))
+    for i in range(10):
+        print('{:<24}   {}'.format(pred[i], y_test.values[i]))
 
     rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
     cf = casos_favorables(y_test.values, pred)
