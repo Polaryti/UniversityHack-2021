@@ -6,11 +6,12 @@ import sys
 
 def casos_favorables(test, pred):
     rotura = 0
-    for t, p in test, pred:
-        if p < t:
+    total = len(test)
+    for i in range(total):
+        if pred[i] < test[i]:
             rotura += 1
 
-    return rotura / len(test)
+    return rotura / total
 
 
 if __name__ == "__main__":
@@ -22,9 +23,11 @@ if __name__ == "__main__":
     pred = reg.predict(X_test)
     
     print(pred[:10])
-    print(y_test[:10])
+    print(y_test.values[:10])
 
 
     rrmse = mean_squared_error(y_test, pred) / y_train.mean()
-    cf = casos_favorables(y_test, pred)
+    cf = casos_favorables(y_test.values, pred)
     metric = (0.7 * rrmse) + (0.3 + (1 - cf))
+
+    print(metric)
