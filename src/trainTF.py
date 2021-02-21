@@ -65,7 +65,7 @@ if __name__ == "__main__":
 
     history = model.fit(
         X.values, Y.values,
-        epochs=1, validation_split=0.25, verbose=1)
+        epochs=10, validation_split=0.25, verbose=0)
 
     pred = model.predict(X.values)
 
