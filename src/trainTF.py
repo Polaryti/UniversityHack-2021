@@ -51,8 +51,9 @@ if __name__ == "__main__":
                   'unidades_vendidas'], df['unidades_vendidas']
 
     model = keras.Sequential([
-        layers.Dense(32, activation='relu'),
-        layers.Dense(32, activation='relu'),
+        layers.Dense(64, activation='sigmoid'),
+        layers.Dense(32, activation='exponential'),
+        layers.Dense(64, activation='sigmoid'),
         layers.Dense(1)
     ])
 
