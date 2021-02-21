@@ -20,7 +20,7 @@ if __name__ == "__main__":
     df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
     X_train, X_test, y_train, y_test = train_test_split(
         df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.35)
-    reg = RandomForestRegressor(n_jobs=-1)
+    reg = RandomForestRegressor(min_samples_split=3, criterion='mae', n_jobs=-1)
     reg.fit(X_train, y_train)
     pred = reg.predict(X_test)
 
