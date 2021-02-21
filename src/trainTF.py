@@ -56,15 +56,15 @@ if __name__ == "__main__":
         layers.Dense(1)
     ])
 
-    optimizer = tf.keras.optimizers.RMSprop(0.01)
+    #optimizer = tf.keras.optimizers.RMSprop(0.01)
 
-    model.compile(loss='mse',
-                  optimizer=optimizer,
+    model.compile(loss='mae',
+                  optimizer=tf.keras.optimizers.Adadelta(),
                   metrics=['mae', 'mse'])
 
     history = model.fit(
         X.values, Y.values,
-        epochs=4, validation_split=0.25, verbose=1)
+        epochs=6, validation_split=0.25, verbose=1)
 
     plot_history(history)
 
