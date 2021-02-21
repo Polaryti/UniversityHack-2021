@@ -51,26 +51,28 @@ if __name__ == "__main__":
                   'unidades_vendidas'], df['unidades_vendidas']
 
     model = keras.Sequential([
-        layers.Dense(32, activation='relu'),
-        layers.Dense(32, activation='relu'),
+        layers.Dense(64, activation='sigmoid'),
+        layers.Dense(32, activation='exponential'),
+        layers.Dense(64, activation='sigmoid'),
         layers.Dense(1)
     ])
 
     #optimizer = tf.keras.optimizers.RMSprop(0.01)
 
     model.compile(loss='mae',
-                  optimizer=tf.keras.optimizers.RMSprop(),
+                  optimizer=tf.keras.optimizers.Adadelta(),
                   metrics=['mae', 'mse'])
 
     history = model.fit(
         X.values, Y.values,
         epochs=1, validation_split=0.25, verbose=1)
 
-    pred = model.predict(X.values[:10])
+    pred = model.predict(X.values)
 
-    print(pred)
-    print(Y.values[:10])
-    plot_history(history)
+    for i in range(20):
+        print('{:<12}   {}'.format(pred[i], Y.values[i]))
+
+    # plot_history(history)
 
     # rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
     # cf = casos_favorables(y_test.values, pred)
