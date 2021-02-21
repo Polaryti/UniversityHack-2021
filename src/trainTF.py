@@ -69,8 +69,10 @@ if __name__ == "__main__":
 
     pred = model.predict(X.values)
 
-    for i in range(20):
-        print('{:<12}   {}'.format(pred[i], Y.values[i]))
+    print(pred[:20])
+    print(Y.values[:20])
+    # for i in range(20):
+    #     print('{:<12}   {}'.format(pred[i], Y.values[i]))
 
     # plot_history(history)
 
