@@ -2,6 +2,8 @@ import tensorflow as tf
 from tensorflow.keras import metrics
 
 # https://www.tensorflow.org/api_docs/python/tf/keras/metrics/Metric
+
+
 class DatathonMetric(metrics.Metric):
 
     def __init__(self, name='datathon_metric', **kwargs):
