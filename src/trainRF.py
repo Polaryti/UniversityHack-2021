@@ -24,8 +24,7 @@ if __name__ == "__main__":
     reg.fit(X_train, y_train)
     pred = reg.predict(X_test)
 
-    pred = map(lambda x : math.ceil(x), pred)
-
+    pred = list(map(lambda x : round(x), pred))
     print('{:<24}   {}'.format("Pred", "True"))
     for i in range(15):
         print('{:<24}   {}'.format(pred[i], y_test.values[i]))
