@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     history = model.fit(
         X.values, Y.values,
-        epochs=3, validation_split=0.25, verbose=2)
+        epochs=4, validation_split=0.25, verbose=1)
 
     plot_history(history)
 
