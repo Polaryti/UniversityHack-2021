@@ -51,22 +51,25 @@ if __name__ == "__main__":
                   'unidades_vendidas'], df['unidades_vendidas']
 
     model = keras.Sequential([
-        layers.Dense(64, activation='sigmoid'),
-        layers.Dense(32, activation='exponential'),
-        layers.Dense(64, activation='sigmoid'),
+        layers.Dense(32, activation='relu'),
+        layers.Dense(32, activation='relu'),
         layers.Dense(1)
     ])
 
     #optimizer = tf.keras.optimizers.RMSprop(0.01)
 
     model.compile(loss='mae',
-                  optimizer=tf.keras.optimizers.Adadelta(),
+                  optimizer=tf.keras.optimizers.RMSprop(),
                   metrics=['mae', 'mse'])
 
     history = model.fit(
         X.values, Y.values,
-        epochs=6, validation_split=0.25, verbose=1)
+        epochs=1, validation_split=0.25, verbose=1)
 
+    pred = model.predict(X.values[:10])
+
+    print(pred)
+    print(Y.values[:10])
     plot_history(history)
 
     # rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
