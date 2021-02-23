@@ -1,10 +1,9 @@
 import pandas as pd
-from sklearn.ensemble import RandomForestRegressor
+import xgboost as xgb
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
-from sklearn.model_selection import GridSearchCV
-import math
 import sys
+import math
 
 def casos_favorables(test, pred):
         rotura = 0
@@ -20,23 +19,17 @@ def datathon_metric(pred, y_test):
     cf = casos_favorables(y_test.values, pred)
     return (0.7 * rrmse) + (0.3 * (1 - cf))
 
-
 if __name__ == "__main__":
     df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
     X_train, X_test, y_train, y_test = train_test_split(
         df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3)
+    dtrain = xgb.DMatrix(X_train, y_train)
+    dtest = xgb.DMatrix(X_test, y_test) 
 
-    parameters = {'n_estimators': [100], 'verbose':[2], 'n_jobs':[-1]}
+    param = {'max_depth':2, 'eta':1, 'objective':'reg:tweedie' }
+    model = xgb.train(param, dtrain)
+    pred = model.predict(dtest)
 
-    reg = RandomForestRegressor()
-    clf = GridSearchCV(reg, parameters, scoring=mean_absolute_error)
-    clf.fit(X_train, y_train)
-
-    print(clf.cv_results_.keys())
-
-    pred = clf.predict(X_test)
-
-    pred = list(map(lambda x: round(x), pred))
     print('{:<24}   {}'.format("Pred", "True"))
     for i in range(15):
         print('{:<24}   {}'.format(pred[i], y_test.values[i]))
