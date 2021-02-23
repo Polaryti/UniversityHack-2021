@@ -35,8 +35,6 @@ def completar_primeros_precios(row):
 
 
 if __name__ == "__main__":
-    print(len(sys.argv))
-    print(sys.argv[2])
     if len(sys.argv) == 3 and sys.argv[2] == 'base':
         print("base")
         df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
