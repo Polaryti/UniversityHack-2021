@@ -26,19 +26,30 @@ if __name__ == "__main__":
     dtrain = xgb.DMatrix(X_train, y_train)
     dtest = xgb.DMatrix(X_test, y_test) 
 
-    param = {'max_depth':2, 'eta':1, 'objective':'reg:tweedie' }
-    model = xgb.train(param, dtrain)
-    pred = model.predict(dtest)
-
-    print('{:<24}   {}'.format("Pred", "True"))
-    for i in range(15):
-        print('{:<24}   {}'.format(pred[i], y_test.values[i]))
-
-    rrmse = math.sqrt(mean_squared_error(y_test.values, pred)) / y_train.mean()
-    cf = casos_favorables(y_test.values, pred)
-    metric = (0.7 * rrmse) + (0.3 * (1 - cf))
-
-    print('El mse: {}'.format(mean_squared_error(y_test, pred)))
-    print('El mae: {}'.format(mean_absolute_error(y_test, pred)))
-    print('El cf es: {}'.format(cf))
-    print('La métrica propia es: {}'.format(metric))
+    for dep in [8,9,10,11,12,13,14,15,16,17,18]:
+        cf_total = 0
+        metrica_total = 0
+        for _ in range(5):
+            param = {'max_depth':dep, 'eta':1, 'objective':'reg:tweedie' }
+            model = xgb.train(param, dtrain)
+            pred = model.predict(dtest)
+            '''
+            print('{:<24}   {}'.format("Pred", "True"))
+            for i in range(15):
+                print('{:<24}   {}'.format(pred[i], y_test.values[i]))
+            '''
+            rrmse = math.sqrt(mean_squared_error(y_test.values, pred)) / y_train.mean()
+            cf = casos_favorables(y_test.values, pred)
+            metric = (0.7 * rrmse) + (0.3 * (1 - cf))
+            cf_total += cf
+            metrica_total += metric
+            #print('El mse: {}'.format(mean_squared_error(y_test, pred)))
+            #print('El mae: {}'.format(mean_absolute_error(y_test, pred)))
+        
+        cf_total /= 5
+        metrica_total /= 5
+        print('depth: {}'.format(dep))
+        print('El cf es: {}'.format(cf))
+        print('La métrica propia es: {}'.format(metric))
+        print('El cf es: {}'.format(cf_total))
+        print('La métrica propia es: {}'.format(metrica_total))
