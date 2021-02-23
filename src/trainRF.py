@@ -6,21 +6,21 @@ import math
 import sys
 import numpy as np
 
-
 def casos_favorables(test, pred):
-    rotura = 0
-    total = len(test)
-    for i in range(total):
-        if pred[i] < test[i]:
-            rotura += 1
+        rotura = 0
+        total = len(test)
+        for i in range(total):
+            if pred[i] < test[i]:
+                rotura += 1
 
-    return (total - rotura) / total
+        return (total - rotura) / total
 
 
 if __name__ == "__main__":
     df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
     X_train, X_test, y_train, y_test = train_test_split(
         df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3)
+
     for i in [100,110,120,130,140,150,160,170,180,190,200]:
         reg = RandomForestRegressor(verbose=0, n_jobs=-1,n_estimators=i)
         reg.fit(X_train, y_train)
