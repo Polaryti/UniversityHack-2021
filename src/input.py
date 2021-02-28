@@ -1,5 +1,3 @@
-# pylint: disable=no-member
-
 import sys
 import math
 import pandas as pd
@@ -9,8 +7,6 @@ precio_actual = {}
 primer_precio = {}
 
 # Establece los precios no especificados como el último valor indicado para el mismo id ('-1' si nunca se ha especificado)
-
-
 def completar_precios(row):
     precio = float(row['precio'].replace(',', '.')) if isinstance(
         row['precio'], str) else row['precio']
@@ -23,9 +19,8 @@ def completar_precios(row):
             primer_precio[identificador] = precio
     return precio
 
+
 # Establece los precios que quedan sin especificar como el precio indicado más cercano
-
-
 def completar_primeros_precios(row):
     precio = row['precio']
     if precio == -1.0:
@@ -35,15 +30,17 @@ def completar_primeros_precios(row):
 
 
 if __name__ == "__main__":
-    if len(sys.argv) == 3 and sys.argv[2] == 'base':
-        print("base")
-        df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
-        df.drop_duplicates(inplace=True)
-        df.to_csv(index=False, path_or_buf=sys.argv[1].replace(
-            '.txt', '') + "_base.csv", sep='|')
+    if len(sys.argv) == 3:
+        option = sys.argv[2]
+        if option != 'base' and option != 'drop' and option != 'full':
+            raise Exception(
+                "Positional parameter incorrect. It must be 'base' or 'drop'")
     else:
-        df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
-        df.drop_duplicates(inplace=True)
+        option = 'base'
+
+    df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
+    df.drop_duplicates(inplace=True)
+    if option != 'base':
         # Quitar la hora de 'fecha'
         df['fecha'] = df['fecha'].apply(lambda x: x.replace(' 0:00:00', ''))
         # Completar parámetro precio
@@ -55,10 +52,6 @@ if __name__ == "__main__":
         df['mes'] = pd.DatetimeIndex(df['fecha']).month
         df['anyo'] = pd.DatetimeIndex(df['fecha']).year
         df.drop('fecha', axis=1, inplace=True)
-
-        # Corregir valores vacios de 'categoria_dos'
-        df['categoria_dos'] = df['categoria_dos'].apply(
-            lambda x: 0 if math.isnan(x) else x)
 
         # One-hot encoding de 'estado'
         df = pd.concat([df, pd.get_dummies(pd.get_dummies(
@@ -74,5 +67,13 @@ if __name__ == "__main__":
 
         df['antiguedad'].fillna(0, inplace=True)
 
-        df.to_csv(index=False, path_or_buf=sys.argv[1].replace(
-            '.txt', '') + ".csv", sep='|')
+        if option == 'drop':
+            # Quitar la 'categoria_dos'
+            df.drop('categoria_dos', axis=1, inplace=True)
+        else:
+            # Corregir valores vacios de 'categoria_dos'
+            df['categoria_dos'] = df['categoria_dos'].apply(
+                lambda x: 0 if math.isnan(x) else x)
+
+    df.to_csv(index=False, path_or_buf=sys.argv[1].replace(
+        '.txt', '') + "_" + option + ".csv", sep='|')
