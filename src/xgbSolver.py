@@ -25,8 +25,9 @@ def datathon_metric(pred, y_test):
 
 
 if __name__ == "__main__":
-    df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
-    solution = pd.read_csv('ruta', sep='|')
+    df = pd.read_csv(r'C:\Users\Mario\Documents\GitHub\UniversityHack-2021\data\Modelar_UH2021_drop.csv', sep='|')
+    solution = pd.read_csv(r'C:\Users\Mario\Documents\GitHub\UniversityHack-2021\data\Estimar_UH2021_drop.csv', sep='|')
+    solution_ori = pd.read_csv(r'C:\Users\Mario\Documents\GitHub\UniversityHack-2021\data\Estimar_UH2021_base.csv', sep='|')
 
     score = 100
     while score > 2:
@@ -57,8 +58,10 @@ if __name__ == "__main__":
             print('{:<24}   {}'.format(pred[i], y_test.values[i]))
 
     with open('Atmira_Universitat Politècnica de València_Nevermore_1.txt', 'w') as csv_file:
+        sol = xgb.DMatrix(solution)
         csvwriter = csv.writer(csv_file, delimiter='|')
         csvwriter.writerow(['FECHA', 'ID', 'UNIDADES'])
-        for _, prediction in solution.iterrows():
+        sol =
+        for i in range(len(sol)):
             csvwriter.writerow(
-                [prediction['fecha'], prediction['id'], round(model.predict(prediction))])
+                [solution_ori[i]['fecha'], prediction['id'], round(model.predict(prediction))])
