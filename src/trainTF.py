@@ -8,6 +8,8 @@ import matplotlib.pyplot as plt
 import math
 import sys
 
+from tensorflow.python.keras import activations
+
 
 def casos_favorables(test, pred):
     rotura = 0
@@ -51,21 +53,25 @@ if __name__ == "__main__":
                   'unidades_vendidas'], df['unidades_vendidas']
 
     model = keras.Sequential([
-        layers.Dense(64, activation='sigmoid'),
-        layers.Dense(32, activation='exponential'),
-        layers.Dense(64, activation='sigmoid'),
-        layers.Dense(1)
+        layers.Dense(512, activation='relu'),
+        layers.Dense(256, activation='relu'),
+        layers.Dense(128, activation='relu'),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(32, activation='relu'),
+        layers.Dense(64, activation='relu'),
+        layers.Dense(128, activation='relu'),
+        layers.Dense(256, activation='relu'),
+        layers.Dense(512, activation='relu'),
+        layers.Dense(1, activation='linear')
     ])
 
-    #optimizer = tf.keras.optimizers.RMSprop(0.01)
-
-    model.compile(loss='mae',
-                  optimizer=tf.keras.optimizers.Adadelta(),
+    model.compile(loss='mean_absolute_error',
+                  optimizer='adam',
                   metrics=['mae', 'mse'])
 
     history = model.fit(
         X.values, Y.values,
-        epochs=10, validation_split=0.25, verbose=0)
+        epochs=2, validation_split=0.2, verbose=1)
 
     pred = model.predict(X.values)
 
