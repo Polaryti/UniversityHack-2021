@@ -20,16 +20,11 @@ def casos_favorables(test, pred):
 if __name__ == "__main__":
     df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
     X_train, X_test, y_train, y_test = train_test_split(
-        df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3,random_state=42)
+        df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3)
+    for _ in [1, 2]:
 
-    #for estimators in [100,150,240]:
-    min = 10
-    mejor = (0, 0)
-    for a in [2,3,4,5,6,7,8,9,10]:
-        print('min_samplea_split: ' + str(a))
-        for b in [1,2,3,4,5]:
-            reg = RandomForestRegressor(random_state=42,verbose=0, n_jobs=-1, n_estimators=10, min_samples_split=a, min_samples_leaf=b)
-            print('min_samples_leaf: ' + str(b))
+        for estimators in [10,20,30,40,50,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,210,220,230,240,250]:
+            reg = RandomForestRegressor(verbose=0, n_jobs=-1, n_estimators=estimators)
             reg.fit(X_train, y_train)
             pred = reg.predict(X_test)
             '''
@@ -43,9 +38,7 @@ if __name__ == "__main__":
 
             for f in range(X_train.shape[1]):
                 print("%d. feature %d (%f)" % (f + 1, indices[f], importances[indices[f]]))
-            '''
             pred = list(map(lambda x : round(x), pred))
-            '''
             print('{:<24}   {}'.format("Pred", "True"))
             for i in range(15):
                 print('{:<24}   {}'.format(pred[i], y_test.values[i]))
@@ -53,17 +46,18 @@ if __name__ == "__main__":
             rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
             cf = casos_favorables(y_test.values, pred)
             metric = (0.7 * rrmse) + (0.3 * (1 - cf))
-            if metric < min:
-                min = metric
-                mejor = (a, b)
             '''
             print('El mse: {}'.format(mean_squared_error(y_test, pred)))
             print('El mae: {}'.format(mean_absolute_error(y_test, pred)))'''
             print('El cf es: {}'.format(cf))
             print('La métrica propia es: {}'.format(metric))
-    print(min)
-    print(mejor)
 
+        scaler = StandardScaler()
+        scaler = scaler.fit(X_train)
+        X_train = scaler.transform(X_train)
+        scaler = StandardScaler()
+        scaler = scaler.fit(X_test)
+        X_test = scaler.transform(X_test)
 
     
     #filename = 'model_RF.sav'
