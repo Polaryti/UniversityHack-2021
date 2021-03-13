@@ -9,18 +9,43 @@ from sklearn.datasets import load_breast_cancer
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.inspection import permutation_importance
 from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error, mean_absolute_error
+import math
 import pandas as pd
 import sys
 
+def casos_favorables(test, pred):
+    rotura = 0
+    total = len(test)
+    for i in range(total):
+        if pred[i] < test[i]:
+            rotura += 1
+
+    return (total - rotura) / total
+
 df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
 X_train, X_test, y_train, y_test = train_test_split(
-    df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.25)
+    df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3, random_state=42)
 
-clf = RandomForestRegressor(n_estimators=100, random_state=42)
+clf = RandomForestRegressor(n_estimators=10, random_state=42, n_jobs=-1)
 clf.fit(X_train, y_train)
-print("Accuracy on test data: {:.2f}".format(clf.score(X_test, y_test)))
+pred = clf.predict(X_test)
+pred = list(map(lambda x: round(x), pred))
 
-result = permutation_importance(clf, X_train, y_train, n_repeats=10,
+rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
+cf = casos_favorables(y_test.values, pred)
+metric = (0.7 * rrmse) + (0.3 * (1 - cf))
+
+print('{:<24}   {}'.format("Pred", "True"))
+for i in range(15):
+    print('{:<24}   {}'.format(pred[i], y_test.values[i]))
+
+print('El mse: {}'.format(mean_squared_error(y_test, pred)))
+print('El mae: {}'.format(mean_absolute_error(y_test, pred)))
+print('El cf es: {}'.format(cf))
+print('La métrica propia es: {}'.format(metric))
+
+result = permutation_importance(clf, X_train, y_train, n_repeats=5,
                                 random_state=42)
 perm_sorted_idx = result.importances_mean.argsort()
 
@@ -30,11 +55,11 @@ tree_indices = np.arange(0, len(clf.feature_importances_)) + 0.5
 fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
 ax1.barh(tree_indices,
          clf.feature_importances_[tree_importance_sorted_idx], height=0.7)
-ax1.set_yticklabels(df.feature_names[tree_importance_sorted_idx])
+ax1.set_yticklabels(df.columns[tree_importance_sorted_idx])
 ax1.set_yticks(tree_indices)
 ax1.set_ylim((0, len(clf.feature_importances_)))
 ax2.boxplot(result.importances[perm_sorted_idx].T, vert=False,
-            labels=df.feature_names[perm_sorted_idx])
+            labels=df.columns[perm_sorted_idx])
 fig.tight_layout()
 plt.show()
 
@@ -42,7 +67,7 @@ fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(12, 8))
 corr = spearmanr(df.loc[:, df.columns != 'unidades_vendidas']).correlation
 corr_linkage = hierarchy.ward(corr)
 dendro = hierarchy.dendrogram(
-    corr_linkage, labels=df.feature_names.tolist(), ax=ax1, leaf_rotation=90
+    corr_linkage, labels=df.columns.tolist().remove('unidades_vendidas'), ax=ax1, leaf_rotation=90
 )
 dendro_idx = np.arange(0, len(dendro['ivl']))
 
@@ -59,11 +84,26 @@ cluster_id_to_feature_ids = defaultdict(list)
 for idx, cluster_id in enumerate(cluster_ids):
     cluster_id_to_feature_ids[cluster_id].append(idx)
 selected_features = [v[0] for v in cluster_id_to_feature_ids.values()]
+print(selected_features)
 
-X_train_sel = X_train[:, selected_features]
-X_test_sel = X_test[:, selected_features]
 
-clf_sel = RandomForestRegressor(n_estimators=100, random_state=42)
+X_train_sel, X_test_sel, y_train, y_test = train_test_split(
+    df.iloc[:, selected_features], df['unidades_vendidas'], test_size=0.3, random_state=42)
+
+clf_sel = RandomForestRegressor(n_estimators=10, random_state=42, n_jobs=-1)
 clf_sel.fit(X_train_sel, y_train)
-print("Accuracy on test data with features removed: {:.2f}".format(
-      clf_sel.score(X_test_sel, y_test)))
+pred = clf.predict(X_test_sel)
+pred = list(map(lambda x: round(x), pred))
+
+rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
+cf = casos_favorables(y_test.values, pred)
+metric = (0.7 * rrmse) + (0.3 * (1 - cf))
+
+print('{:<24}   {}'.format("Pred", "True"))
+for i in range(15):
+    print('{:<24}   {}'.format(pred[i], y_test.values[i]))
+
+print('El mse: {}'.format(mean_squared_error(y_test, pred)))
+print('El mae: {}'.format(mean_absolute_error(y_test, pred)))
+print('El cf es: {}'.format(cf))
+print('La métrica propia es: {}'.format(metric))
