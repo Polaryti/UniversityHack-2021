@@ -25,11 +25,17 @@ if __name__ == "__main__":
     reg = LogisticRegression()
     reg.fit(X_train, y_train)
     pred = reg.predict(X_test)
+    pred = list(map(lambda x: round(x), pred))
 
     rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
     cf = casos_favorables(y_test.values, pred)
     metric = (0.7 * rrmse) + (0.3 * (1 - cf))
 
+
+    print('{:<24}   {}'.format("Pred", "True"))
+    for i in range(15):
+        print('{:<24}   {}'.format(pred[i], y_test.values[i]))
+    
     print('El mse: {}'.format(mean_squared_error(y_test, pred)))
     print('El mae: {}'.format(mean_absolute_error(y_test, pred)))
     print('El cf es: {}'.format(cf))

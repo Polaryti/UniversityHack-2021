@@ -1,5 +1,5 @@
 import pandas as pd
-from sklearn.isotonic import IsotonicRegression
+from sklearn.neural_network import MLPRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
 import math
@@ -22,9 +22,9 @@ if __name__ == "__main__":
     X_train, X_test, y_train, y_test = train_test_split(
         df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3)
 
-    reg = IsotonicRegression(y_min=0, y_max=500)
-    reg.fit(X_train['visitas'], y_train)
-    pred = reg.predict(X_test['visitas'])
+    reg = MLPRegressor(verbose=True, alpha=0.00005, learning_rate='invscaling', max_iter=20)
+    reg.fit(X_train, y_train)
+    pred = reg.predict(X_test)
     pred = list(map(lambda x: round(x), pred))
 
     rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
