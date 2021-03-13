@@ -7,6 +7,8 @@ precio_actual = {}
 primer_precio = {}
 
 # Establece los precios no especificados como el último valor indicado para el mismo id ('-1' si nunca se ha especificado)
+
+
 def completar_precios(row):
     precio = float(row['precio'].replace(',', '.')) if isinstance(
         row['precio'], str) else row['precio']
@@ -34,7 +36,7 @@ if __name__ == "__main__":
         option = sys.argv[2]
         if option != 'base' and option != 'drop' and option != 'full':
             raise Exception(
-                "Positional parameter incorrect. It must be 'base' or 'drop'")
+                "Positional parameter incorrect. It must be 'base', 'drop' or 'full'")
     else:
         option = 'base'
 
