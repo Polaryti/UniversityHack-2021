@@ -23,6 +23,12 @@ def __datetime_parser(datetime):
     datetime = datetime.split('-')
     return datetime[2] + '-' + datetime[1] + '-' + datetime[0]
 
+def __datathon_metric(y_test, y_train, pred):
+    rrmse = math.sqrt(mean_squared_error(
+        y_test.values, pred)) / y_train.mean()
+    cf = __favorable_cases(y_test.values, pred)
+    return (0.7 * rrmse) + (0.3 * (1 - cf))
+
 
 if __name__ == "__main__":
     modelar = pd.read_csv(
@@ -46,11 +52,9 @@ if __name__ == "__main__":
 
         pred = model.predict(X_test)
         pred = list(map(lambda x: round(x), pred))
-
-        rrmse = math.sqrt(mean_squared_error(
-            y_test.values, pred)) / y_train.mean()
+        
         cf = __favorable_cases(y_test.values, pred)
-        metric = (0.7 * rrmse) + (0.3 * (1 - cf))
+        metric = __datathon_metric(y_test, y_train, pred)
 
         print('El mse: {}'.format(mean_squared_error(y_test, pred)))
         print('El mae: {}'.format(mean_absolute_error(y_test, pred)))
