@@ -50,7 +50,6 @@ if __name__ == "__main__":
         df['precio'] = df.apply(completar_primeros_precios, axis=1)
         # Separación de fecha en 3 columnas
         df['fecha'] = pd.to_datetime(df['fecha'])
-        df['dia_anyo'] = pd.DatetimeIndex(df['fecha']).dayofyear
         df['dia'] = pd.DatetimeIndex(df['fecha']).day
         df['mes'] = pd.DatetimeIndex(df['fecha']).month
         df['anyo'] = pd.DatetimeIndex(df['fecha']).year
@@ -77,6 +76,8 @@ if __name__ == "__main__":
             # Corregir valores vacios de 'categoria_dos'
             df['categoria_dos'] = df['categoria_dos'].apply(
                 lambda x: 0 if math.isnan(x) else x)
-
+        cols = df.columns.tolist()
+        cols = cols[:5] + cols[6:] + [cols[5]]
+        df = df[cols]
     df.to_csv(index=False, path_or_buf=sys.argv[1].replace(
         '.txt', '') + "_" + option + ".csv", sep='|')
