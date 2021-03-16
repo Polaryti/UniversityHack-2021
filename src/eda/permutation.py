@@ -5,9 +5,10 @@ import sys
 from sklearn.model_selection import train_test_split
 
 
-df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
-X, y = df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas']
-rfr = RandomForestRegressor(n_estimators=10)
-rfr.fit(X, y)
-result = permutation_importance(rfr, X, y, n_repeats=5, random_state=42, n_jobs=-1)
-print(result)
+def permutation():
+    df = pd.read_csv(filepath_or_buffer=r'data/Modelar_UH2021_drop.csv', sep='|')
+    X, y = df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas']
+    rfr = RandomForestRegressor(n_estimators=10)
+    rfr.fit(X, y)
+    result = permutation_importance(rfr, X, y, n_repeats=5, random_state=42, n_jobs=-1)
+    print(result)
