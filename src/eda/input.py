@@ -50,6 +50,7 @@ if __name__ == "__main__":
         df['precio'] = df.apply(completar_primeros_precios, axis=1)
         # Separación de fecha en 3 columnas
         df['fecha'] = pd.to_datetime(df['fecha'])
+        df['dia_anyo'] = pd.DatetimeIndex(df['fecha']).dayofyear
         df['dia'] = pd.DatetimeIndex(df['fecha']).day
         df['mes'] = pd.DatetimeIndex(df['fecha']).month
         df['anyo'] = pd.DatetimeIndex(df['fecha']).year
