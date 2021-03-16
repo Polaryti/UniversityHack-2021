@@ -47,8 +47,8 @@ def plot_history(history):
   plt.show()
 
 
-if __name__ == "__main__":
-    df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
+def tf():
+    df = pd.read_csv(r'data/Modelar_UH2021_drop.csv', sep='|')
     X, Y = df.loc[:, df.columns !=
                   'unidades_vendidas'], df['unidades_vendidas']
 
@@ -77,10 +77,10 @@ if __name__ == "__main__":
 
     print(pred[:20])
     print(Y.values[:20])
-    # for i in range(20):
-    #     print('{:<12}   {}'.format(pred[i], Y.values[i]))
+    for i in range(20):
+        print('{:<12}   {}'.format(pred[i], Y.values[i]))
 
-    # plot_history(history)
+    plot_history(history)
 
     # rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
     # cf = casos_favorables(y_test.values, pred)

@@ -7,7 +7,7 @@ import sys
 import numpy as np
 
 
-def casos_favorables(test, pred):
+def __casos_favorables(test, pred):
     rotura = 0
     total = len(test)
     for i in range(total):
@@ -17,8 +17,8 @@ def casos_favorables(test, pred):
     return (total - rotura) / total
 
 
-if __name__ == "__main__":
-    df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
+def isotonic():
+    df = pd.read_csv(r'data/Modelar_UH2021_drop.csv', sep='|')
     X_train, X_test, y_train, y_test = train_test_split(
         df.loc[:, df.columns != 'unidades_vendidas'], df['unidades_vendidas'], test_size=0.3)
 
@@ -28,7 +28,7 @@ if __name__ == "__main__":
     pred = list(map(lambda x: round(x), pred))
 
     rrmse = math.sqrt(mean_squared_error(y_test, pred)) / y_train.mean()
-    cf = casos_favorables(y_test.values, pred)
+    cf = __casos_favorables(y_test.values, pred)
     metric = (0.7 * rrmse) + (0.3 * (1 - cf))
 
     print('{:<24}   {}'.format("Pred", "True"))
