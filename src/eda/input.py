@@ -30,6 +30,7 @@ def completar_primeros_precios(row):
         precio = primer_precio.get(identificador)
     return precio
 
+
 def input_parser(path=None, option=None):
     if option == None and len(sys.argv) == 3:
         option = sys.argv[2]
@@ -38,11 +39,11 @@ def input_parser(path=None, option=None):
                 "Positional parameter incorrect. It must be 'base', 'drop' or 'full'")
     else:
         option = 'base'
-    
+
     if path != None:
         df = pd.read_csv(path, sep='|')
     else:
-        df = pd.read_csv(filepath_or_buffer=sys.argv[1], sep='|')
+        df = pd.read_csv(filepath_or_buffer=path, sep='|')
 
     df.drop_duplicates(inplace=True)
     if option != 'base':
@@ -67,7 +68,7 @@ def input_parser(path=None, option=None):
         # One-hot encoding de 'categoria_uno'
         df = pd.concat([df, pd.get_dummies(pd.get_dummies(
             df['categoria_uno'], prefix='categoria_uno'))], axis=1).drop(['categoria_uno'], axis=1)
-        
+
         # One-hot encoding de 'dia_atipico'
         df = pd.concat([df, pd.get_dummies(pd.get_dummies(
             df['dia_atipico'], prefix='dia_atipico'))], axis=1).drop(['dia_atipico'], axis=1)
@@ -81,14 +82,10 @@ def input_parser(path=None, option=None):
             # Corregir valores vacios de 'categoria_dos'
             df['categoria_dos'] = df['categoria_dos'].apply(
                 lambda x: 0 if math.isnan(x) else x)
-        cols = df.columns.tolist()
-        cols = cols[:5] + cols[6:] + [cols[5]]
-        df = df[cols]
-    df.to_csv(index=False, path_or_buf=sys.argv[1].replace(
+
+    df.to_csv(index=False, path_or_buf=path.replace(
         '.txt', '') + "_" + option + ".csv", sep='|')
 
 
 if __name__ == "__main__":
     input_parser(None, None)
-
-
