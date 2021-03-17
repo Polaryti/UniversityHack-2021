@@ -67,7 +67,7 @@ def input_parser(path=None, option=None):
         # One-hot encoding de 'categoria_uno'
         df = pd.concat([df, pd.get_dummies(pd.get_dummies(
             df['categoria_uno'], prefix='categoria_uno'))], axis=1).drop(['categoria_uno'], axis=1)
-
+        
         # One-hot encoding de 'dia_atipico'
         df = pd.concat([df, pd.get_dummies(pd.get_dummies(
             df['dia_atipico'], prefix='dia_atipico'))], axis=1).drop(['dia_atipico'], axis=1)
