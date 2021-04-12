@@ -88,4 +88,5 @@ def input_parser(path=None, option=None):
 
 
 if __name__ == "__main__":
-    input_parser(None, None)
+    input_parser(
+        r'C:\Users\Mario\Documents\GitHub\UniversityHack-2021\.FaseLocal\data\Modelar_UH2021.txt', 'base')
