@@ -38,7 +38,7 @@ def input_parser(path=None, option=None):
             raise Exception(
                 "Positional parameter incorrect. It must be 'base', 'drop' or 'full'")
     else:
-        option = 'base'
+        option = 'drop'
 
     if path != None:
         df = pd.read_csv(path, sep='|')
@@ -89,4 +89,4 @@ def input_parser(path=None, option=None):
 
 if __name__ == "__main__":
     input_parser(
-        r'C:\Users\Mario\Documents\GitHub\UniversityHack-2021\.FaseLocal\data\Modelar_UH2021.txt', 'base')
+        r'/home/mario/Documents/others/UniversityHack-2021/FaseNacional/data/Modelar_UH2021.txt', 'drop')
