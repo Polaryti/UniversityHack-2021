@@ -1,6 +1,5 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from statsmodels.tsa.stattools import adfuller
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error, mean_absolute_error
@@ -26,8 +25,8 @@ def __datetime_parser(datetime):
     return datetime[2] + '-' + datetime[1] + '-' + datetime[0]
 
 
-df_modelar = pd.read_csv('/home/mario/Documents/others/UniversityHack-2021/FaseNacional/data/Modelar_UH2021_drop.csv', sep='|')
-df_estimar = pd.read_csv('/home/mario/Documents/others/UniversityHack-2021/FaseNacional/data/Estimar_UH2021_drop.csv', sep='|')
+df_modelar = pd.read_csv(r'.FaseLocal\data\Modelar_UH2021_drop.csv', sep='|')
+df_estimar = pd.read_csv(r'.FaseLocal\data\Estimar_UH2021_drop.csv', sep='|')
 df_modelar.drop(columns=['estado_Rotura'], inplace=True)
 
 
@@ -58,14 +57,15 @@ for index, row in df_modelar.iterrows():
 print(f"CF media: {total_cf / len(model_dict)}")
 print(f"Metrica media: {total_metrica / len(model_dict)}")
 
-with open('Nevermore_res.txt', 'w') as csv_file:
+with open('Nevermore_res.txt', 'w', newline='', encoding='utf-8') as csv_file:
     csvwriter = csv.writer(csv_file, delimiter='|')
     csvwriter.writerow(['FECHA', 'ID', 'UNIDADES'])
     
     for index, row in df_estimar.iterrows():
         aux = pd.DataFrame(columns=df_estimar.columns)
-        aux.loc[0] = row
-        est_pred = model_dict[row['id']].predict(aux)
-        csvwriter.writerow([__datetime_parser(df_estimar.iloc[index]['fecha']), int(df_estimar.iloc[index]['id']), round(est_pred)])
+        aux.loc[0] = row    
+        est_pred = model_dict[row['id']].predict(aux)[0]
+        data_txt = f"{int(df_estimar.iloc[index]['dia'])}/{int(df_estimar.iloc[index]['mes'])}/{int(df_estimar.iloc[index]['anyo'])}"
+        csvwriter.writerow([data_txt, int(df_estimar.iloc[index]['id']), round(est_pred)])
 
         
