@@ -27,6 +27,7 @@ def __datetime_parser(datetime):
 
 df_modelar = pd.read_csv(r'.FaseLocal\data\Modelar_UH2021_drop.csv', sep='|')
 df_estimar = pd.read_csv(r'.FaseLocal\data\Estimar_UH2021_drop.csv', sep='|')
+ids_estimar = set(df_estimar['id'].unique())
 df_modelar.drop(columns=['estado_Rotura'], inplace=True)
 
 
@@ -34,7 +35,7 @@ model_dict = {}
 total_cf = 0
 total_metrica = 0
 for index, row in df_modelar.iterrows():
-    if row['id'] not in model_dict:
+    if row['id'] in ids_estimar and row['id'] not in model_dict:
         df_aux = df_modelar[df_modelar['id'] == row['id']]
         X_train, X_test, y_train, y_test = train_test_split(
             df_aux.loc[:, df_aux.columns != 'unidades_vendidas'], df_aux['unidades_vendidas'], test_size=0.25)
