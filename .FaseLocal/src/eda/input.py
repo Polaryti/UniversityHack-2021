@@ -57,6 +57,7 @@ def input_parser(path=None, option=None):
         df['dia'] = pd.DatetimeIndex(df['fecha']).day
         df['mes'] = pd.DatetimeIndex(df['fecha']).month
         df['anyo'] = pd.DatetimeIndex(df['fecha']).year
+        df['dia_anyo'] = pd.DatetimeIndex(df['fecha']).dayofyear
         df.drop('fecha', axis=1, inplace=True)
 
         #df = df[df['estado'] != 'Rotura']
@@ -89,4 +90,4 @@ def input_parser(path=None, option=None):
 
 if __name__ == "__main__":
     input_parser(
-        r'/home/mario/Documents/others/UniversityHack-2021/FaseNacional/data/Modelar_UH2021.txt', 'drop')
+        r'C:\\Users\\Pere\Documents\\UPV\GRUPS\\UniversityHack\\2021\data\\Modelar_UH2021.txt', 'drop')
